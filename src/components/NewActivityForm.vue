@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- TODO display the name of the activity -->
+        <!-- display the name of the activity -->
         <!-- Application header/title: activity variable is the activity data from the Vue script below -->
         <h1 class="text-center">{{ activity }} Time Tracker</h1>
 
@@ -12,24 +12,23 @@
 
             <div class="card-body">                 <!-- START of the actual form section -->
                 <!-- Display error messages section -->
-                <!-- TODO use v-show to show this if there are validation errors -->
+                <!-- using v-show to show this section if there are validation errors -->
                 <div class="alert alert-danger" v-show="errors.length > 0">
-                    <!-- TODO show a list of validation errors from form -->
+                    <!-- show a list of validation errors from form -->
                     <li v-for="error in errors">{{ error }}</li>
                 </div>
 
 
                 <!-- 1. Date input -->
                 <div class="form-group">
-                    <!-- TODO display name of activity in the label -->
-                    <!-- TODO use a filter to display the name of activity in lowercase -->
+                    <!-- display name of activity in the label -->
                     <label class="form-label" for="date">
                         What date did you
-                        <!-- TODO activity name, in lowercase -->
+                        <!-- using a filter to display the activity name in lowercase -->
                         {{ activity | lowercase }}?
                     </label>
 
-                    <!-- TODO use v-model to connect this input to dateString data -->
+                    <!-- using v-model to connect this input element to dateString data -->
                     <input id="date" class="form-control" type="date" v-model="dateString">
 
                     <small id="date-help" class="form-text text-muted">
@@ -42,8 +41,8 @@
                 <div class="form-group">
                     <label class="form-label" for="hours">How many hours did you practice for?</label>
 
-                    <!-- TODO use v-model to connect this input to hours data -->
                     <!--
+                        * using v-model to connect this input element to hours data
                         * if only v-model="hours", then vue reads it as a string
                         * change to v-model.number, to read the input value as an integer
                         * adding the 'number' modifier will only allow numbers to be entered
@@ -61,10 +60,10 @@
                 <div class="form-group">
                     <label class="form-label" for="activityType">What type?</label>
 
-                    <!-- TODO Create select element, use v-model to connect to the types -->
-                    <!-- v-model will connect the type selected, an option from the drop-down, to the type data in Vue -->
+                    <!-- create a select element & using a v-model to connect to the types -->
+                    <!-- v-model will connect the option type selected from the drop-down, to the type data in Vue -->
                     <select class="form-control" id="activityType" v-model="type">
-                        <!-- TODO Use v-for to create option elements, one for each type -->
+                        <!-- using v-for to create option elements, one for each type -->
                         <!-- create a dynamic set of options that will read data from the types array in Vue data -->
                         <option v-for="type in types">{{ type }}</option>
                     </select>
@@ -79,7 +78,6 @@
 
                 <!-- Option 1: "Traditional" radio button -->
                 <div class="form-check-inline">
-                    <!-- TODO v-model and v-bind media -->
                     <!--
                         * if each radio button is bound with a unique value,
                           then it will work as a radio button when used with v-model
@@ -90,15 +88,13 @@
                            v-bind:value="media.traditional" v-model="medium">
 
                     <label class="form-check-label" for="media1">
-                        <!--TODO Display text -->
-                        <!-- object key 'traditional' used with data type 'media' to get the value of the object -->
+                        <!-- Display text: object key 'traditional' used with data type 'media' to get the value of the object -->
                         {{ media.traditional }}
                     </label>
                 </div>                              <!-- END of radio button option 1 -->
 
                 <!-- Option 2: "Digital" radio button -->
                 <div class="form-check-inline">
-                    <!-- TODO v-model and v-bind media -->
                     <!--
                         * if each radio button is bound with a unique value,
                           then it will work as a radio button when used with v-model
@@ -109,8 +105,7 @@
                            v-bind:value="media.digital" v-model="medium">
 
                     <label class="form-check-label" for="media2">
-                        <!-- TODO Display text -->
-                        <!-- object key 'digital' used with data type 'media' to get the value of the object -->
+                        <!-- Display text: object key 'digital' used with data type 'media' to get the value of the object -->
                         {{ media.digital }}
                     </label>
                 </div>                              <!-- END of radio button option 2 -->
@@ -132,7 +127,6 @@
 
                 <!-- Submit Button for form: Add a "Add record" button -->
                 <div>
-                    <!-- TODO Add v-on:click -->
                     <button class="btn btn-primary mt-2" type="button" v-on:click="submit">Add record</button>
                 </div>                              <!-- END of 'Add record' submit button -->
             </div>                                  <!-- END of the actual form section -->
@@ -144,22 +138,22 @@
 
 <script>
     export default {
-        name: "NewActivityForm",                    // name of the component
+        name: "NewActivityForm",              // name of this component
         data() {
             return {
                 // Name of the activity, e.g., sport, exercise, language, etc.
-                activity: "Practice Art",
+                activity: "Practice Art",           // ASK PROF: Should this be in App.vue?
 
                 // these will be used with v-model to work with form data
-                dateString: "",             // a date input from the client-side is always a string
+                dateString: "",               // date input from the client-side is always a string
                 hours: 1,
-                type: "Sketching",          // type is initialized to the the first item in the drop-down
+                type: "Sketching",            // type initialized to the first item in the drop-down
                 medium: "",
                 completed: false,
                 note: "",
 
-                // used to create choices (drop-down list) - the option elements for select for question 3
-                types: [ "Sketching", "Drawing", "Painting" ],          // ASK PROF.
+                // used to create choices (drop-down list): the option elements for select for question 3
+                types: [ "Sketching", "Drawing", "Painting" ],          // ASK PROF: Should this be here or in App.vue?
 
                 // used to set the values and the labels for the radio buttons for question 4
                 media: {
@@ -167,8 +161,8 @@
                     digital: "Digital"
                 },
 
-                // store errors discovered during validation
-                errors: [],
+                // store errors in an array discovered during validation
+                errors: []
             }
         },                                                    // End of data
         filters: {
@@ -209,7 +203,7 @@
                     this.errors.push("Select a media.");
                 }
 
-                // if there are no errors, add a record to the summary
+                // if there are no errors, add a record to the activityRecords in the parent App.vue
                 if(this.errors.length == 0)
                 {
                     // create a record
@@ -222,9 +216,10 @@
                         note: this.note
                     }
 
-                    // TODO emit message to parent App.vue
+                    // emit a message to parent App.vue to add the record to the activityRecords data
                     this.$emit("record-added", record);
 
+                    // reset data values to initial values
                     this.dateString = "";
                     this.hours = 1;
                     this.type = "Sketching";

@@ -4,6 +4,11 @@
         <div class="card">
             <h2 class="card-header">Activity Records</h2>
 
+            <div class="edit-table-toggle form-check">
+                <input id="edit-table" type="checkbox" class="form-check-input" v-model="editTable">
+                <label for="edit-table" class="form-check-label">Edit table?</label>
+            </div>
+
             <div class="card-body">
                 <h3>
                     <!-- TODO Display number of records -->
@@ -13,28 +18,32 @@
 
                 <div id="records">
                     <table class="table table-hover">               <!-- START of table -->
-                        <tr>
+
+                        <tr>                                        <!-- START of table row headers -->
                             <th>Date</th>
-                            <th>How many hours?</th>
+                            <th>Hours</th>
                             <th>Type</th>
                             <th>Media</th>
-                            <th>Completed</th>
+                            <th>Status</th>
                             <th>Notes</th>
-                        </tr>
+                            <th v-show="editTable">Actions</th>
+                        </tr>                                       <!-- END of table row headers -->
 
-                        <!-- TODO use v-for to create one table row for each activity record -->
-                        <!-- v-bind:class creates class identifiers (not dynamic, it is hard coded) for css styling -->
-                        <tr v-for="record in activityRecords"
-                            v-bind:class="{sketchingRow: record.type === 'Sketching',
-                                           drawingRow: record.type === 'Drawing',
-                                           paintingRow: record.type === 'Painting'}">
-                            <td>{{ record.date | shortDate}}</td>
-                            <td>{{ record.hours | decimalPlaces(2)}}</td>
-                            <td>{{ record.type }}</td>
-                            <td>{{ record.medium }}</td>
-                            <td>{{ record.completed | checkedBox}}</td>
-                            <td>{{ record.note | textareaDisplayCharacterLimit}}</td>
-                        </tr>
+                        <!--
+                            * v-for to create one table row for each activity record
+                            * v-bind props (from TableRecordRow.vue, the child component) &
+                              pass data from parent (ActivityTable.vue) to child component
+                            * v-on to listen to events from the child component, TableRecordRow.vue
+                        -->
+                        <!-- ASK PROF: id does not exist as yet -->
+                        <table-record-row v-for="record in activityRecords"
+                                          v-bind:key="record.id"
+                                          v-bind:record="record"
+                                          v-bind:edit="editTable"
+                                          v-on:delete-record-row="deleteRecord"
+                                          v-on:update-record-row="updateRecord">
+                        </table-record-row>                         <!-- END of TableRecordRow.vue component -->
+
                     </table>            <!-- END of table -->
                 </div>                  <!-- END of #records div -->
             </div>                      <!-- END of .card-body div -->
@@ -44,38 +53,24 @@
 
 
 <script>
+    import TableRecordRow from "@/components/TableRecordRow.vue";
+
     export default {
-        name: "ActivityTable",          // name of component
-        // do not modify a prop
-        props: {
-            activityRecords: Array      // this data has to be provided by its parent, App.vue
+        name: "ActivityTable",            // name of this component
+        components: {
+            TableRecordRow
         },
-        filters: {
-            // used in the list of records table
-            shortDate(date) {
-                return new Intl.DateTimeFormat("en-US", { timeZone: "UTC" }).format(date);
-            },
-            checkedBox(completed) {
-                if(completed)
-                {
-                    return `Completed`;
-                }
-                return `Not completed`;
-            },
-            decimalPlaces: function(hours, numberOfDecimalPlaces) {
-                let formattedHours = hours.toFixed(numberOfDecimalPlaces);
-                return formattedHours;
-            },
-            textareaDisplayCharacterLimit(text) {
-                if(text.length >= 40)
-                {
-                    return text.substr(0, 40) + "...";
-                }
-                return text;
+        // do not modify a prop: props data has to be provided by its parent, App.vue
+        props: {
+            activityRecords: Array
+        },
+        data() {
+            return {
+                editTable: false
             }
         },
         computed: {
-            // set the plurality of the word 'record(s)' in the table section of the application
+            // set the plurality of the word 'record(s)' in the table title section of the application
             totalRecords() {
                 if (this.activityRecords.length == 1)
                 {
@@ -86,6 +81,16 @@
                   return this.activityRecords.length + " records";
                 }
             },
+        },
+        methods: {
+            deleteRecord(record) {
+                // emits a message to the parent App.vue
+                this.$emit("delete-record-table", record);
+            },
+            updateRecord(record) {
+                // emits a message to the parent App.vue
+                this.$emit("update-record-table", record)
+            }
         }
     }
 </script>
@@ -96,20 +101,5 @@
     {
         max-height: 250px;
         overflow: scroll;
-    }
-
-    .sketchingRow
-    {
-        background-color: yellow;
-    }
-
-    .drawingRow
-    {
-        background-color: greenyellow;
-    }
-
-    .paintingRow
-    {
-        background-color: orange;
     }
 </style>
