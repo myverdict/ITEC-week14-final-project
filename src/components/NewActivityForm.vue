@@ -156,7 +156,7 @@
                 types: [ "Sketching", "Drawing", "Painting" ],          // ASK PROF: Should this be here or in App.vue?
 
                 // used to set the values and the labels for the radio buttons for question 4
-                media: {
+                media: {                                                // ASK PROF: Should this be here or in App.vue?
                     traditional: "Traditional",
                     digital: "Digital"
                 },
@@ -229,7 +229,7 @@
                 }
             }                       // END of the submit method
         }                           // END of methods
-    }
+    }                               // END of export default
 </script>
 
 

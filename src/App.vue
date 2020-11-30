@@ -7,7 +7,7 @@
                         v-on:update-record-table="updateRecord">
         </activity-table>
 
-        <activity-summary></activity-summary>
+        <activity-summary v-bind:activityRecords="activityRecords"></activity-summary>
     </div>
 </template>
 
@@ -29,7 +29,7 @@
                 // Array of activity records displayed in the activity table summary
                 activityRecords: [],
                 // types: [],                      // ASK PROF: HOW TO GET THE TYPES HERE?
-                // mostRecentRecord: {}            // ASK PROF: If we need this for ActivitySummary.vue page
+                // mostRecentRecord: {}            // ASK PROF: Do we need this for ActivitySummary.vue page
             }
         },
         methods: {
@@ -38,7 +38,7 @@
                 this.activityRecords.push(record);
 
                 // set the mostRecentRecord to current record
-                // this.mostRecentRecord = record;            // ASK PROF: If we need this for ActivitySummary.vue page
+                // this.mostRecentRecord = record;            // ASK PROF: Do we need this for ActivitySummary.vue page
 
                 // sort the records according to date
                 this.activityRecords.sort(function(r1, r2) {
