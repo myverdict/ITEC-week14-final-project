@@ -31,18 +31,19 @@
 
                         <!--
                             * v-for to create one table row for each activity record
-                            * v-bind props (from TableRecordRow.vue, the child component) &
+                            * v-bind props (from ActivityRow.vue, the child component) &
                               pass data from parent (ActivityTable.vue) to child component
-                            * v-on to listen to events from the child component, TableRecordRow.vue
+                            * v-on to listen to events from the child component, ActivityRow.vue
+                            * alternate way of writing the tag element: <ActivityRow></ActivityRow>
                         -->
-                        <!-- ASK PROF: id does not exist as yet -->
-                        <table-record-row v-for="record in activityRecords"
-                                          v-bind:key="record.id"
-                                          v-bind:record="record"
-                                          v-bind:edit="editTable"
-                                          v-on:delete-record-row="deleteRecord"
-                                          v-on:update-record-row="updateRecord">
-                        </table-record-row>                         <!-- END of TableRecordRow.vue component -->
+                        <!-- ASK PROF: v-bind:key="record.id" as id does not exist as yet -->
+                        <activity-row v-for="record in activityRecords"
+                                      v-bind:key="record.id"
+                                      v-bind:record="record"
+                                      v-bind:edit="editTable"
+                                      v-on:delete-record-row="deleteRecord"
+                                      v-on:update-record-row="updateRecord">
+                        </activity-row>                         <!-- END of ActivityRow.vue component -->
 
                     </table>            <!-- END of table -->
                 </div>                  <!-- END of #records div -->
@@ -53,12 +54,12 @@
 
 
 <script>
-    import TableRecordRow from "@/components/TableRecordRow.vue";
+    import ActivityRow from "@/components/ActivityRow.vue";
 
     export default {
         name: "ActivityTable",            // name of this component
         components: {
-            TableRecordRow
+            ActivityRow
         },
         // do not modify a prop: props data has to be provided by its parent, App.vue
         props: {

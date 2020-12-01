@@ -26,8 +26,9 @@
 
 <script>
     export default {
-        name: "TableRecordRow",             // name of the component
+        name: "ActivityRow",             // name of the component
         // props data has to be provided by its parent, ActivityTable.vue
+        // do not change the props
         props: {
             record: Object,
             edit: Boolean
